@@ -1,0 +1,1 @@
+printf "# QuantityMeasurementFrontendApp\n\nFrontend-only repository for UC19 and UC20.\n" > README.md
