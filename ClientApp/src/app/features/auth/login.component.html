@@ -1,0 +1,44 @@
+<div class="authPage">
+  <div class="bgOrb orbOne"></div>
+  <div class="bgOrb orbTwo"></div>
+  <div class="bgGrid"></div>
+
+  <mat-card class="authCard">
+    <div class="brandBlock">
+      <div class="brandBadge">
+        <mat-icon>straighten</mat-icon>
+      </div>
+      <div>
+        <div class="eyebrow">QUANTITY MEASUREMENT</div>
+        <h2>Welcome back</h2>
+        <p class="heroText">Sign in to continue with your personalized measurement history and dashboard.</p>
+      </div>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="authForm">
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Email / Username</mat-label>
+        <input matInput formControlName="login" />
+        <mat-error *ngIf="form.controls.login.invalid">Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password" />
+        <mat-error *ngIf="form.controls.password.invalid">Required</mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="full submitBtn" [disabled]="form.invalid || busy">
+        <span *ngIf="!busy">Login</span>
+        <span *ngIf="busy">Signing in...</span>
+      </button>
+
+      <div class="msg error" *ngIf="error">{{ error }}</div>
+    </form>
+
+    <div class="footerText">
+      <span>New user?</span>
+      <a routerLink="/register">Create account</a>
+    </div>
+  </mat-card>
+</div>

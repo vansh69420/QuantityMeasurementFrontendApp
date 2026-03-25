@@ -1,0 +1,37 @@
+<div class="drawerHeader">
+  <div class="drawerTitle">
+    <mat-icon>history</mat-icon>
+    <span>History</span>
+  </div>
+
+  <button mat-stroked-button (click)="onRefreshClick()" [disabled]="busy">
+    Refresh
+  </button>
+</div>
+
+<div class="drawerBody">
+  <div class="skeletonList" *ngIf="busy">
+    <div class="skeletonRow" *ngFor="let _ of skeletonRows">
+      <div class="skeletonLine title"></div>
+      <div class="skeletonLine short"></div>
+      <div class="skeletonLine medium"></div>
+    </div>
+  </div>
+
+  <div class="drawerHint" *ngIf="!busy && !items?.length">No history yet.</div>
+
+  <mat-list *ngIf="!busy && items?.length">
+    <mat-list-item *ngFor="let it of items; trackBy: trackByOpId">
+      <div matListItemTitle class="rowTitle">
+        {{ formatTitle(it) }}
+      </div>
+      <div matListItemLine class="rowSub">
+        {{ it.timestampUtc || '' }}
+      </div>
+
+      <div matListItemLine class="rowSub errorText" *ngIf="it.hasError">
+        Error: {{ it.errorMessage }}
+      </div>
+    </mat-list-item>
+  </mat-list>
+</div>

@@ -1,0 +1,51 @@
+<div class="authPage">
+  <div class="bgOrb orbOne"></div>
+  <div class="bgOrb orbTwo"></div>
+  <div class="bgGrid"></div>
+
+  <mat-card class="authCard">
+    <div class="brandBlock">
+      <div class="brandBadge">
+        <mat-icon>person_add</mat-icon>
+      </div>
+      <div>
+        <div class="eyebrow">QUANTITY MEASUREMENT</div>
+        <h2>Create your account</h2>
+        <p class="heroText">Register to save your measurement operations and keep your history isolated to your account.</p>
+      </div>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="authForm">
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username" />
+        <mat-error *ngIf="form.controls.username.invalid">Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" />
+        <mat-error *ngIf="form.controls.email.invalid">Valid email required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password" />
+        <mat-error *ngIf="form.controls.password.invalid">Required</mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="full submitBtn" [disabled]="form.invalid || busy">
+        <span *ngIf="!busy">Create Account</span>
+        <span *ngIf="busy">Creating account...</span>
+      </button>
+
+      <div class="msg ok" *ngIf="ok">{{ ok }}</div>
+      <div class="msg error" *ngIf="error">{{ error }}</div>
+    </form>
+
+    <div class="footerText">
+      <span>Already have an account?</span>
+      <a routerLink="/login">Login</a>
+    </div>
+  </mat-card>
+</div>

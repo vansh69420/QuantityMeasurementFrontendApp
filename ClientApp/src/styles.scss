@@ -1,0 +1,98 @@
+@use '@angular/material' as mat;
+
+/* 1) Angular Material core styles */
+@include mat.core();
+
+/* 2) Custom palettes (Primary: #3f65ff, Accent: #34d1b6) */
+$qm-blue: (
+  50:  #eef2ff,
+  100: #d6deff,
+  200: #b9c6ff,
+  300: #97abff,
+  400: #7891ff,
+  500: #3f65ff, /* primary */
+  600: #365bf2,
+  700: #2e51e6,
+  800: #2647d9,
+  900: #1734c2,
+  contrast: (
+    50:  #1f2533,
+    100: #1f2533,
+    200: #1f2533,
+    300: #1f2533,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff
+  )
+);
+
+$qm-teal: (
+  50:  #e9fbf7,
+  100: #c6f4ea,
+  200: #9bead9,
+  300: #68ddc5,
+  400: #45d5ba,
+  500: #34d1b6, /* accent */
+  600: #2cc2aa,
+  700: #23b09b,
+  800: #1b9f8c,
+  900: #0f7f70,
+  contrast: (
+    50:  #1f2533,
+    100: #1f2533,
+    200: #1f2533,
+    300: #1f2533,
+    400: #1f2533,
+    500: #1f2533,
+    600: #1f2533,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff
+  )
+);
+
+$primary: mat.define-palette($qm-blue, 500);
+$accent: mat.define-palette($qm-teal, 500);
+$warn: mat.define-palette(mat.$red-palette);
+
+/* 3) Define a light theme */
+$qm-theme: mat.define-light-theme((
+  color: (
+    primary: $primary,
+    accent: $accent,
+    warn: $warn
+  ),
+  typography: mat.define-typography-config(),
+  density: 0
+));
+
+/* 4) Apply theme to all Material components */
+@include mat.all-component-themes($qm-theme);
+
+/* 5) Global app styling (white + blue look) */
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #eef3ff; /* approved background */
+  color: #1f2533;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+
+/* 6) Custom toolbar gradient (looks like your UC19 header) */
+.mat-toolbar.mat-primary,
+mat-toolbar.mat-primary {
+  background: linear-gradient(90deg, #3f65ff, #4a74ff) !important;
+  color: #fff !important;
+}
+
+/* 7) Slightly nicer cards/shadows (optional but improves look a lot) */
+.mat-mdc-card {
+  border-radius: 14px !important;
+  box-shadow: 0 14px 30px rgba(20, 40, 120, 0.12) !important;
+}
