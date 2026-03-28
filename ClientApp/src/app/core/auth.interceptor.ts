@@ -1,14 +1,15 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { AuthService } from './auth.service';
 import { catchError, from, switchMap, throwError } from 'rxjs';
+import { AuthService } from './auth.service';
+import { API_BASE_URL } from './api.config';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
 
   const isProtectedApi =
-    req.url.startsWith('/api/quantity') ||
-    req.url.startsWith('/api/admin');
+    req.url.startsWith(`${API_BASE_URL}/api/quantity`) ||
+    req.url.startsWith(`${API_BASE_URL}/api/admin`);
 
   const alreadyRetried = req.headers.get('X-QM-Retry') === '1';
 

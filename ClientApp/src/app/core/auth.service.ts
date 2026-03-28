@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { API_BASE_URL } from './api.config';
 
 export interface AuthSessionResponse {
   accessToken: string;
@@ -13,10 +14,14 @@ export interface AuthSessionResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private static readonly sessionStorageKey = 'qm_auth_session';
+
   private accessToken: string | null = null;
   private user: AuthSessionResponse | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.restoreSessionFromStorage();
+  }
 
   getToken(): string | null {
     return this.accessToken;
@@ -38,32 +43,48 @@ export class AuthService {
   clearSession(): void {
     this.accessToken = null;
     this.user = null;
+    sessionStorage.removeItem(AuthService.sessionStorageKey);
   }
 
   async register(username: string, email: string, password: string): Promise<string> {
     const res = await firstValueFrom(
-      this.http.post('/api/auth/register', { username, email, password }, { responseType: 'text' })
+      this.http.post(
+        `${API_BASE_URL}/api/auth/register`,
+        { username, email, password },
+        {
+          responseType: 'text',
+          withCredentials: true
+        }
+      )
     );
+
     return res;
   }
 
   async login(login: string, password: string): Promise<AuthSessionResponse> {
     const session = await firstValueFrom(
-      this.http.post<AuthSessionResponse>('/api/auth/login', { login, password })
+      this.http.post<AuthSessionResponse>(
+        `${API_BASE_URL}/api/auth/login`,
+        { login, password },
+        { withCredentials: true }
+      )
     );
 
-    this.accessToken = session.accessToken;
-    this.user = session;
+    this.setSession(session);
     return session;
   }
 
   async refresh(): Promise<AuthSessionResponse | null> {
     try {
       const session = await firstValueFrom(
-        this.http.post<AuthSessionResponse>('/api/auth/refresh', {})
+        this.http.post<AuthSessionResponse>(
+          `${API_BASE_URL}/api/auth/refresh`,
+          {},
+          { withCredentials: true }
+        )
       );
-      this.accessToken = session.accessToken;
-      this.user = session;
+
+      this.setSession(session);
       return session;
     } catch {
       this.clearSession();
@@ -73,5 +94,32 @@ export class AuthService {
 
   logoutClientOnly(): void {
     this.clearSession();
+  }
+
+  private setSession(session: AuthSessionResponse): void {
+    this.accessToken = session.accessToken;
+    this.user = session;
+    sessionStorage.setItem(AuthService.sessionStorageKey, JSON.stringify(session));
+  }
+
+  private restoreSessionFromStorage(): void {
+    const raw = sessionStorage.getItem(AuthService.sessionStorageKey);
+    if (!raw) {
+      return;
+    }
+
+    try {
+      const session = JSON.parse(raw) as AuthSessionResponse;
+
+      if (!session?.accessToken || !session?.userId) {
+        sessionStorage.removeItem(AuthService.sessionStorageKey);
+        return;
+      }
+
+      this.accessToken = session.accessToken;
+      this.user = session;
+    } catch {
+      sessionStorage.removeItem(AuthService.sessionStorageKey);
+    }
   }
 }

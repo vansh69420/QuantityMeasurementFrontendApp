@@ -3,6 +3,21 @@
   <div class="bgOrb orbTwo"></div>
   <div class="bgGrid"></div>
 
+  <div class="authAccentGroup">
+    <div class="authAccentChip authChipOne">
+      <mat-icon>straighten</mat-icon>
+      <span>Length</span>
+    </div>
+    <div class="authAccentChip authChipTwo isTeal">
+      <mat-icon>scale</mat-icon>
+      <span>Weight</span>
+    </div>
+    <div class="authAccentChip authChipThree">
+      <mat-icon>science</mat-icon>
+      <span>Volume</span>
+    </div>
+  </div>
+
   <mat-card class="authCard">
     <div class="brandBlock">
       <div class="brandBadge">
@@ -11,7 +26,7 @@
       <div>
         <div class="eyebrow">QUANTITY MEASUREMENT</div>
         <h2>Welcome back</h2>
-        <p class="heroText">Sign in to continue with your personalized measurement history and dashboard.</p>
+                <p class="heroText">Sign in to continue.</p>
       </div>
     </div>
 
@@ -24,7 +39,16 @@
 
       <mat-form-field appearance="outline" class="full">
         <mat-label>Password</mat-label>
-        <input matInput type="password" formControlName="password" />
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          class="iconBtn"
+          [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+          (click)="togglePasswordVisibility()">
+          <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
         <mat-error *ngIf="form.controls.password.invalid">Required</mat-error>
       </mat-form-field>
 
