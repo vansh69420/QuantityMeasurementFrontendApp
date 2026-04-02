@@ -92,6 +92,20 @@ export class AuthService {
     }
   }
 
+  async logout(): Promise<void> {
+    try {
+      await firstValueFrom(
+        this.http.post(
+          `${API_BASE_URL}/api/auth/logout`,
+          {},
+          { withCredentials: true }
+        )
+      );
+    } finally {
+      this.clearSession();
+    }
+  }
+
   logoutClientOnly(): void {
     this.clearSession();
   }

@@ -197,10 +197,10 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl('/admin');
   }
 
-  logout(): void {
-    this.auth.logoutClientOnly();
-    this.router.navigateByUrl('/login');
-  }
+  async logout(): Promise<void> {
+  await this.auth.logout();
+  await this.router.navigateByUrl('/login');
+}
 
   private resetResult(): void {
     this.resultText = '-';
