@@ -90,6 +90,22 @@ export class DashboardComponent implements OnInit {
     this.refreshHistory();
   }
 
+    get measurementTypeLabel(): string {
+    if (this.measurementType === MeasurementType.Length) {
+      return 'LENGTH';
+    }
+
+    if (this.measurementType === MeasurementType.Weight) {
+      return 'WEIGHT';
+    }
+
+    if (this.measurementType === MeasurementType.Temperature) {
+      return 'TEMPERATURE';
+    }
+
+    return 'VOLUME';
+  }
+
   refreshHistory = async (): Promise<void> => {
     this.historyBusy = true;
     try {

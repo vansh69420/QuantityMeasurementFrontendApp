@@ -1,10 +1,6 @@
 <div class="adminLayout">
   <mat-toolbar color="primary" class="topbar">
-    <div class="titleWrap">
-      <mat-icon>shield</mat-icon>
-      <span class="title">Admin Console</span>
-    </div>
-
+    <span>Admin Console</span>
     <span class="spacer"></span>
 
     <button mat-button (click)="goToApp()">
@@ -19,153 +15,164 @@
   </mat-toolbar>
 
   <div class="page">
-    <div class="grid">
-      <mat-card class="usersCard">
-        <div class="cardHeader">
-          <div>
-            <div class="eyebrow">ADMIN</div>
-            <h2>Users</h2>
-          </div>
+    <div class="adminShell">
+      <section class="adminHero">
+        <div class="eyebrow">Administration</div>
+        <h1>Review users and inspect operation history with clarity.</h1>
+        <p>
+          Search users, load detailed account information, and inspect user-specific operation history in a cleaner admin workspace.
+        </p>
+      </section>
 
-          <button mat-stroked-button (click)="loadUsers()" [disabled]="usersBusy || detailsBusy || historyBusy">
-            <mat-icon>refresh</mat-icon>
-            Refresh
-          </button>
-        </div>
-
-        <mat-form-field appearance="outline" class="full searchField">
-          <mat-label>Search users</mat-label>
-          <input
-            matInput
-            [value]="searchText"
-            (input)="onSearchChange($event)"
-            placeholder="Username, email, or role" />
-        </mat-form-field>
-
-        <div class="stateBlock" *ngIf="usersBusy">
-          <mat-spinner diameter="36"></mat-spinner>
-          <div>Loading users...</div>
-        </div>
-
-        <div class="stateBlock error" *ngIf="!usersBusy && usersError">
-          {{ usersError }}
-        </div>
-
-        <div class="stateBlock" *ngIf="!usersBusy && !usersError && filteredUsers.length === 0">
-          No users found.
-        </div>
-
-        <mat-list *ngIf="!usersBusy && !usersError && filteredUsers.length > 0" class="userList">
-          <button
-            mat-list-item
-            type="button"
-            class="userRow"
-            *ngFor="let user of filteredUsers; trackBy: trackByUserId"
-            [class.isSelected]="selectedUser?.userId === user.userId"
-            (click)="selectUser(user)">
-            <div matListItemTitle class="userName">{{ user.username }}</div>
-            <div matListItemLine class="userSub">{{ user.email }}</div>
-            <div matListItemLine class="userRole">{{ user.role }}</div>
-          </button>
-        </mat-list>
-      </mat-card>
-
-      <div class="detailColumn">
-        <mat-card class="detailCard">
+      <div class="adminGrid">
+        <mat-card class="usersCard">
           <div class="cardHeader">
             <div>
-              <div class="eyebrow">SELECTED USER</div>
-              <h2>Details</h2>
-            </div>
-          </div>
-
-          <div class="stateBlock" *ngIf="detailsBusy">
-            <mat-spinner diameter="36"></mat-spinner>
-            <div>Loading user details...</div>
-          </div>
-
-          <div class="stateBlock error" *ngIf="!detailsBusy && detailsError">
-            {{ detailsError }}
-          </div>
-
-          <div class="stateBlock" *ngIf="!detailsBusy && !detailsError && !selectedUser">
-            Select a user to view details.
-          </div>
-
-          <div class="detailGrid" *ngIf="!detailsBusy && !detailsError && selectedUser">
-            <div class="detailItem">
-              <span class="label">User ID</span>
-              <span class="value mono">{{ selectedUser.userId }}</span>
+              <div class="eyebrow">User Directory</div>
+              <h2>Users</h2>
             </div>
 
-            <div class="detailItem">
-              <span class="label">Username</span>
-              <span class="value">{{ selectedUser.username }}</span>
-            </div>
-
-            <div class="detailItem">
-              <span class="label">Email</span>
-              <span class="value">{{ selectedUser.email }}</span>
-            </div>
-
-            <div class="detailItem">
-              <span class="label">Role</span>
-              <span class="value roleBadge">{{ selectedUser.role }}</span>
-            </div>
-          </div>
-        </mat-card>
-
-        <mat-card class="historyCard">
-          <div class="cardHeader">
-            <div>
-              <div class="eyebrow">USER HISTORY</div>
-              <h2>Operations</h2>
-            </div>
-
-            <button
-              mat-stroked-button
-              (click)="reloadSelectedUser()"
-              [disabled]="!selectedUser || historyBusy || detailsBusy">
-              <mat-icon>history</mat-icon>
-              Refresh History
+            <button mat-stroked-button class="softBtn" (click)="loadUsers()" [disabled]="usersBusy || detailsBusy || historyBusy">
+              <mat-icon>refresh</mat-icon>
+              Refresh
             </button>
           </div>
 
-          <div class="stateBlock" *ngIf="historyBusy">
+          <mat-form-field appearance="outline" class="full searchField">
+            <mat-label>Search users</mat-label>
+            <input
+              matInput
+              [value]="searchText"
+              (input)="onSearchChange($event)"
+              placeholder="Username, email, or role" />
+          </mat-form-field>
+
+          <div class="stateBlock" *ngIf="usersBusy">
             <mat-spinner diameter="36"></mat-spinner>
-            <div>Loading history...</div>
+            <div>Loading users...</div>
           </div>
 
-          <div class="stateBlock error" *ngIf="!historyBusy && historyError">
-            {{ historyError }}
+          <div class="stateBlock error" *ngIf="!usersBusy && usersError">
+            {{ usersError }}
           </div>
 
-          <div class="stateBlock" *ngIf="!historyBusy && !historyError && !selectedUser">
-            Select a user to view history.
+          <div class="stateBlock" *ngIf="!usersBusy && !usersError && filteredUsers.length === 0">
+            No users found.
           </div>
 
-          <div class="stateBlock" *ngIf="!historyBusy && !historyError && selectedUser && selectedHistory.length === 0">
-            No history for this user.
-          </div>
+          <mat-list *ngIf="!usersBusy && !usersError && filteredUsers.length > 0" class="userList">
+            <button
+              mat-list-item
+              type="button"
+              class="userRow"
+              *ngFor="let user of filteredUsers; trackBy: trackByUserId"
+              [class.isSelected]="selectedUser?.userId === user.userId"
+              (click)="selectUser(user)">
+              <div matListItemTitle class="userName">{{ user.username }}</div>
+              <div matListItemLine class="userSub">{{ user.email }}</div>
+              <div matListItemLine class="userRole">{{ user.role }}</div>
+            </button>
+          </mat-list>
+        </mat-card>
 
-          <div class="historyList" *ngIf="!historyBusy && !historyError && selectedHistory.length > 0">
-            <div class="historyRow" *ngFor="let item of selectedHistory; trackBy: trackByHistoryOpId">
-              <div class="historyTop">
-                <div class="historyTitle">{{ formatHistoryTitle(item) }}</div>
-                <div class="historyTime">{{ item.timestampUtc || '' }}</div>
-              </div>
-
-              <div class="historyMeta">
-                <span>Measurement Type: {{ item.measurementType }}</span>
-                <span>Operation Type: {{ item.operationType }}</span>
-              </div>
-
-              <div class="historyError" *ngIf="item.hasError">
-                Error: {{ item.errorMessage }}
+        <div class="detailColumn">
+          <mat-card class="detailCard">
+            <div class="cardHeader">
+              <div>
+                <div class="eyebrow">Selected User</div>
+                <h2>Details</h2>
               </div>
             </div>
-          </div>
-        </mat-card>
+
+            <div class="stateBlock" *ngIf="detailsBusy">
+              <mat-spinner diameter="36"></mat-spinner>
+              <div>Loading user details...</div>
+            </div>
+
+            <div class="stateBlock error" *ngIf="!detailsBusy && detailsError">
+              {{ detailsError }}
+            </div>
+
+            <div class="stateBlock" *ngIf="!detailsBusy && !detailsError && !selectedUser">
+              Select a user to view details.
+            </div>
+
+            <div class="detailGrid" *ngIf="!detailsBusy && !detailsError && selectedUser">
+              <div class="detailItem">
+                <span class="label">User ID</span>
+                <span class="value mono">{{ selectedUser.userId }}</span>
+              </div>
+
+              <div class="detailItem">
+                <span class="label">Username</span>
+                <span class="value">{{ selectedUser.username }}</span>
+              </div>
+
+              <div class="detailItem">
+                <span class="label">Email</span>
+                <span class="value">{{ selectedUser.email }}</span>
+              </div>
+
+              <div class="detailItem">
+                <span class="label">Role</span>
+                <span class="value roleBadge">{{ selectedUser.role }}</span>
+              </div>
+            </div>
+          </mat-card>
+
+          <mat-card class="historyCard">
+            <div class="cardHeader">
+              <div>
+                <div class="eyebrow">History</div>
+                <h2>Operations</h2>
+              </div>
+
+              <button
+                mat-stroked-button
+                class="softBtn"
+                (click)="reloadSelectedUser()"
+                [disabled]="!selectedUser || historyBusy || detailsBusy">
+                <mat-icon>history</mat-icon>
+                Refresh History
+              </button>
+            </div>
+
+            <div class="stateBlock" *ngIf="historyBusy">
+              <mat-spinner diameter="36"></mat-spinner>
+              <div>Loading history...</div>
+            </div>
+
+            <div class="stateBlock error" *ngIf="!historyBusy && historyError">
+              {{ historyError }}
+            </div>
+
+            <div class="stateBlock" *ngIf="!historyBusy && !historyError && !selectedUser">
+              Select a user to view history.
+            </div>
+
+            <div class="stateBlock" *ngIf="!historyBusy && !historyError && selectedUser && selectedHistory.length === 0">
+              No history for this user.
+            </div>
+
+            <div class="historyList" *ngIf="!historyBusy && !historyError && selectedHistory.length > 0">
+              <div class="historyRow" *ngFor="let item of selectedHistory; trackBy: trackByHistoryOpId">
+                <div class="historyTop">
+                  <div class="historyTitle">{{ formatHistoryTitle(item) }}</div>
+                  <div class="historyTime">{{ item.timestampUtc || '' }}</div>
+                </div>
+
+                <div class="historyMeta">
+                  <span>Measurement Type: {{ item.measurementType }}</span>
+                  <span>Operation Type: {{ item.operationType }}</span>
+                </div>
+
+                <div class="historyError" *ngIf="item.hasError">
+                  Error: {{ item.errorMessage }}
+                </div>
+              </div>
+            </div>
+          </mat-card>
+        </div>
       </div>
     </div>
   </div>

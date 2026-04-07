@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -9,6 +9,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../core/auth.service';
+import { environment } from '../../../environments/environment';
+
+declare global {
+  interface Window {
+    google?: any;
+  }
+}
 
 @Component({
   standalone: true,
@@ -26,10 +33,11 @@ import { AuthService } from '../../core/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements AfterViewInit {
   busy = false;
   error: string | null = null;
   hidePassword = true;
+  googleReady = false;
 
   form = this.fb.group({
     login: ['', Validators.required],
@@ -39,8 +47,13 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private ngZone: NgZone
   ) {}
+
+  ngAfterViewInit(): void {
+    this.initializeGoogleButton();
+  }
 
   async onSubmit(): Promise<void> {
     if (this.form.invalid) {
@@ -63,8 +76,81 @@ export class LoginComponent {
     }
   }
 
+  onGoogleButtonClick(): void {
+    if (!this.googleReady) {
+      this.error = 'Google sign-in is not ready yet. Please try again.';
+      return;
+    }
+
+    const googleMountElement = document.getElementById('googleLoginButton');
+    const buttonElement = googleMountElement?.querySelector('div[role="button"]') as HTMLElement | null;
+    if (!buttonElement) {
+      this.error = 'Google sign-in is unavailable right now. Please refresh and try again.';
+      return;
+    }
+
+    buttonElement.click();
+  }
+
   togglePasswordVisibility(): void {
     this.hidePassword = !this.hidePassword;
+  }
+
+  private initializeGoogleButton(): void {
+    if (!environment.googleClientId) {
+      return;
+    }
+
+    if (!window.google?.accounts?.id) {
+      window.setTimeout(() => this.initializeGoogleButton(), 200);
+      return;
+    }
+
+    const buttonElement = document.getElementById('googleLoginButton');
+    if (!buttonElement) {
+      return;
+    }
+
+    buttonElement.innerHTML = '';
+
+    window.google.accounts.id.initialize({
+      client_id: environment.googleClientId,
+      callback: (response: { credential?: string }) => {
+        void this.handleGoogleLogin(response.credential);
+      }
+    });
+
+    window.google.accounts.id.renderButton(buttonElement, {
+      theme: 'outline',
+      size: 'large',
+      shape: 'rectangular',
+      text: 'signin_with',
+      width: 320
+    });
+
+    this.googleReady = true;
+  }
+
+  private async handleGoogleLogin(idToken?: string): Promise<void> {
+    if (!idToken) {
+      this.error = 'Google sign-in did not return a valid token.';
+      return;
+    }
+
+    this.busy = true;
+    this.error = null;
+
+    try {
+      await this.auth.googleLogin(idToken);
+
+      await this.ngZone.run(async () => {
+        await this.router.navigateByUrl('/app');
+      });
+    } catch (e: unknown) {
+      this.error = this.getFriendlyErrorMessage(e);
+    } finally {
+      this.busy = false;
+    }
   }
 
   private getFriendlyErrorMessage(error: unknown): string {

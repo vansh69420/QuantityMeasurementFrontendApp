@@ -1,66 +1,111 @@
-<div class="authPage">
-  <div class="bgOrb orbOne"></div>
-  <div class="bgOrb orbTwo"></div>
-  <div class="bgGrid"></div>
+<div class="authScene">
+  <div class="authGlowA"></div>
+  <div class="authGlowB"></div>
 
-  <div class="authAccentGroup">
-    <div class="authAccentChip authChipOne">
-      <mat-icon>thermostat</mat-icon>
-      <span>Temperature</span>
-    </div>
-    <div class="authAccentChip authChipTwo isTeal">
-      <mat-icon>straighten</mat-icon>
-      <span>Measure</span>
-    </div>
-    <div class="authAccentChip authChipThree">
-      <mat-icon>inventory_2</mat-icon>
-      <span>Track History</span>
-    </div>
-  </div>
-
-  <mat-card class="authCard">
-    <div class="brandBlock">
-      <div class="brandBadge">
-        <mat-icon>person_add</mat-icon>
-      </div>
+  <div class="authShell">
+    <section class="authVisual">
       <div>
-        <div class="eyebrow">QUANTITY MEASUREMENT</div>
-        <h2>Create your account</h2>
-                <p class="heroText">Get started in a few quick steps.</p>
+        <div class="authBrand">
+          <div class="authBrandMark">
+            <mat-icon>person_add</mat-icon>
+          </div>
+
+          <div>
+            <div class="authBrandTitle">Quantity Measurement</div>
+            <div class="authBrandSub">Create access to your measurement workspace</div>
+          </div>
+        </div>
+
+        <div class="authHero">
+          <div class="eyebrow">Registration</div>
+          <h1>Create your account with a cleaner onboarding experience.</h1>
+          <p>
+            Start using a premium interface for conversion, comparison, arithmetic operations, and personal measurement history.
+          </p>
+        </div>
+
+        <div class="authFeatureGrid">
+          <div class="authFeatureCard">
+            <div class="authFeatureTitle">Multi-domain support</div>
+            <div class="authFeatureText">Length, weight, temperature, and volume supported in one workflow.</div>
+          </div>
+
+          <div class="authFeatureCard">
+            <div class="authFeatureTitle">Google signup</div>
+            <div class="authFeatureText">Create access quickly with a custom Google sign-up action.</div>
+          </div>
+
+          <div class="authFeatureCard">
+            <div class="authFeatureTitle">Persistent session</div>
+            <div class="authFeatureText">Smooth login and refresh flow built into the auth system.</div>
+          </div>
+
+          <div class="authFeatureCard">
+            <div class="authFeatureTitle">User-scoped data</div>
+            <div class="authFeatureText">History and access remain tied to your authenticated account.</div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="authForm">
-      <mat-form-field appearance="outline" class="full">
-        <mat-label>Username</mat-label>
-        <input matInput formControlName="username" />
-        <mat-error *ngIf="form.controls.username.invalid">Required</mat-error>
-      </mat-form-field>
+    <section class="authPanel">
+      <div class="authPanelCard">
+        <div class="authPanelHead">
+          <div class="eyebrow">Create Account</div>
+          <h2>Get started</h2>
+          <p>
+            Register manually or use Google to create access and enter the dashboard immediately.
+          </p>
+        </div>
 
-      <mat-form-field appearance="outline" class="full">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" />
-        <mat-error *ngIf="form.controls.email.invalid">Valid email required</mat-error>
-      </mat-form-field>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="authForm">
+          <mat-form-field appearance="outline" class="full">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username" />
+            <mat-error *ngIf="form.controls.username.invalid">Required</mat-error>
+          </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full">
-        <mat-label>Password</mat-label>
-        <input matInput type="password" formControlName="password" />
-        <mat-error *ngIf="form.controls.password.invalid">Required</mat-error>
-      </mat-form-field>
+          <mat-form-field appearance="outline" class="full">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" />
+            <mat-error *ngIf="form.controls.email.invalid">Valid email required</mat-error>
+          </mat-form-field>
 
-      <button mat-raised-button color="primary" class="full submitBtn" [disabled]="form.invalid || busy">
-        <span *ngIf="!busy">Create Account</span>
-        <span *ngIf="busy">Creating account...</span>
-      </button>
+          <mat-form-field appearance="outline" class="full">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password" />
+            <mat-error *ngIf="form.controls.password.invalid">Required</mat-error>
+          </mat-form-field>
 
-      <div class="msg ok" *ngIf="ok">{{ ok }}</div>
-      <div class="msg error" *ngIf="error">{{ error }}</div>
-    </form>
+          <button mat-raised-button class="submitBtn" [disabled]="form.invalid || busy">
+            <span *ngIf="!busy">Create Account</span>
+            <span *ngIf="busy">Creating account...</span>
+          </button>
 
-    <div class="footerText">
-      <span>Already have an account?</span>
-      <a routerLink="/login">Login</a>
-    </div>
-  </mat-card>
+          <div class="googleAuthWrap">
+            <div class="googleDivider">or create with</div>
+
+            <button
+              type="button"
+              class="googleCustomBtn"
+              [disabled]="busy"
+              (click)="onGoogleButtonClick()">
+              <span class="googleBadge">G</span>
+              <span>Sign up with Google</span>
+            </button>
+
+            <div id="googleRegisterButton" class="googleMount"></div>
+          </div>
+
+          <div class="msg ok" *ngIf="ok">{{ ok }}</div>
+          <div class="msg error" *ngIf="error">{{ error }}</div>
+        </form>
+
+        <div class="authFooter">
+          <span>Already have an account?</span>
+          <a routerLink="/login">Login</a>
+        </div>
+      </div>
+    </section>
+  </div>
 </div>

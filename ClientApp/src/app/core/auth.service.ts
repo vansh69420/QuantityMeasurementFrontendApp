@@ -74,6 +74,32 @@ export class AuthService {
     return session;
   }
 
+  async googleLogin(idToken: string): Promise<AuthSessionResponse> {
+    const session = await firstValueFrom(
+      this.http.post<AuthSessionResponse>(
+        `${API_BASE_URL}/api/auth/google/login`,
+        { idToken },
+        { withCredentials: true }
+      )
+    );
+
+    this.setSession(session);
+    return session;
+  }
+
+  async googleRegister(username: string, idToken: string): Promise<AuthSessionResponse> {
+    const session = await firstValueFrom(
+      this.http.post<AuthSessionResponse>(
+        `${API_BASE_URL}/api/auth/google/register`,
+        { username, idToken },
+        { withCredentials: true }
+      )
+    );
+
+    this.setSession(session);
+    return session;
+  }
+
   async refresh(): Promise<AuthSessionResponse | null> {
     try {
       const session = await firstValueFrom(

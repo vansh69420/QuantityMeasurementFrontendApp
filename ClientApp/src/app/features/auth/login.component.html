@@ -1,68 +1,112 @@
-<div class="authPage">
-  <div class="bgOrb orbOne"></div>
-  <div class="bgOrb orbTwo"></div>
-  <div class="bgGrid"></div>
+<div class="authScene">
+  <div class="authGlowA"></div>
+  <div class="authGlowB"></div>
 
-  <div class="authAccentGroup">
-    <div class="authAccentChip authChipOne">
-      <mat-icon>straighten</mat-icon>
-      <span>Length</span>
-    </div>
-    <div class="authAccentChip authChipTwo isTeal">
-      <mat-icon>scale</mat-icon>
-      <span>Weight</span>
-    </div>
-    <div class="authAccentChip authChipThree">
-      <mat-icon>science</mat-icon>
-      <span>Volume</span>
-    </div>
-  </div>
-
-  <mat-card class="authCard">
-    <div class="brandBlock">
-      <div class="brandBadge">
-        <mat-icon>straighten</mat-icon>
-      </div>
+  <div class="authShell">
+    <section class="authVisual">
       <div>
-        <div class="eyebrow">QUANTITY MEASUREMENT</div>
-        <h2>Welcome back</h2>
-                <p class="heroText">Sign in to continue.</p>
+        <div class="authBrand">
+          <div class="authBrandMark">
+            <mat-icon>straighten</mat-icon>
+          </div>
+
+          <div>
+            <div class="authBrandTitle">Quantity Measurement</div>
+            <div class="authBrandSub">Precision workspace for modern operations</div>
+          </div>
+        </div>
+
+        <div class="authHero">
+          <div class="eyebrow">Premium measurement platform</div>
+          <h1>Welcome back to your precision dashboard.</h1>
+          <p>
+            Sign in to access a clean, modern workspace for quantity comparison, conversion, arithmetic operations, and user-scoped history.
+          </p>
+        </div>
+
+        <div class="authFeatureGrid">
+          <div class="authFeatureCard">
+            <div class="authFeatureTitle">Compare & Convert</div>
+            <div class="authFeatureText">Run accurate operations across measurement types with a polished workflow.</div>
+          </div>
+
+          <div class="authFeatureCard">
+            <div class="authFeatureTitle">Arithmetic Tools</div>
+            <div class="authFeatureText">Perform addition, subtraction, and division while preserving clean unit handling.</div>
+          </div>
+
+          <div class="authFeatureCard">
+            <div class="authFeatureTitle">User History</div>
+            <div class="authFeatureText">Track recent operations and revisit your workflow history quickly.</div>
+          </div>
+
+          <div class="authFeatureCard">
+            <div class="authFeatureTitle">Secure Access</div>
+            <div class="authFeatureText">Use standard auth or continue securely with Google sign-in.</div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="authForm">
-      <mat-form-field appearance="outline" class="full">
-        <mat-label>Email / Username</mat-label>
-        <input matInput formControlName="login" />
-        <mat-error *ngIf="form.controls.login.invalid">Required</mat-error>
-      </mat-form-field>
+    <section class="authPanel">
+      <div class="authPanelCard">
+        <div class="authPanelHead">
+          <div class="eyebrow">Sign In</div>
+          <h2>Enter workspace</h2>
+          <p>
+            Continue into your dashboard and pick up your measurement workflow where you left off.
+          </p>
+        </div>
 
-      <mat-form-field appearance="outline" class="full">
-        <mat-label>Password</mat-label>
-        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
-        <button
-          mat-icon-button
-          matSuffix
-          type="button"
-          class="iconBtn"
-          [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
-          (click)="togglePasswordVisibility()">
-          <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
-        </button>
-        <mat-error *ngIf="form.controls.password.invalid">Required</mat-error>
-      </mat-form-field>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="authForm">
+          <mat-form-field appearance="outline" class="full">
+            <mat-label>Email or Username</mat-label>
+            <input matInput formControlName="login" />
+            <mat-error *ngIf="form.controls.login.invalid">Required</mat-error>
+          </mat-form-field>
 
-      <button mat-raised-button color="primary" class="full submitBtn" [disabled]="form.invalid || busy">
-        <span *ngIf="!busy">Login</span>
-        <span *ngIf="busy">Signing in...</span>
-      </button>
+          <mat-form-field appearance="outline" class="full">
+            <mat-label>Password</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+              (click)="togglePasswordVisibility()">
+              <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="form.controls.password.invalid">Required</mat-error>
+          </mat-form-field>
 
-      <div class="msg error" *ngIf="error">{{ error }}</div>
-    </form>
+          <button mat-raised-button class="submitBtn" [disabled]="form.invalid || busy">
+            <span *ngIf="!busy">Sign In</span>
+            <span *ngIf="busy">Signing in...</span>
+          </button>
 
-    <div class="footerText">
-      <span>New user?</span>
-      <a routerLink="/register">Create account</a>
-    </div>
-  </mat-card>
+          <div class="googleAuthWrap">
+            <div class="googleDivider">or continue with</div>
+
+            <button
+              type="button"
+              class="googleCustomBtn"
+              [disabled]="busy"
+              (click)="onGoogleButtonClick()">
+              <span class="googleBadge">G</span>
+              <span>Continue with Google</span>
+            </button>
+
+            <div id="googleLoginButton" class="googleMount"></div>
+          </div>
+
+          <div class="msg error" *ngIf="error">{{ error }}</div>
+        </form>
+
+        <div class="authFooter">
+          <span>New here?</span>
+          <a routerLink="/register">Create your account</a>
+        </div>
+      </div>
+    </section>
+  </div>
 </div>

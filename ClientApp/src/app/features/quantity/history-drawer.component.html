@@ -4,7 +4,7 @@
     <span>History</span>
   </div>
 
-  <button mat-stroked-button (click)="onRefreshClick()" [disabled]="busy">
+  <button mat-stroked-button class="softBtn" (click)="onRefreshClick()" [disabled]="busy">
     Refresh
   </button>
 </div>
@@ -18,20 +18,17 @@
     </div>
   </div>
 
-  <div class="drawerHint" *ngIf="!busy && !items?.length">No history yet.</div>
+  <div class="drawerHint" *ngIf="!busy && !items?.length">
+    No history yet. Your recent measurement operations will appear here.
+  </div>
 
-  <mat-list *ngIf="!busy && items?.length">
-    <mat-list-item *ngFor="let it of items; trackBy: trackByOpId">
-      <div matListItemTitle class="rowTitle">
-        {{ formatTitle(it) }}
-      </div>
-      <div matListItemLine class="rowSub">
-        {{ it.timestampUtc || '' }}
-      </div>
-
-      <div matListItemLine class="rowSub errorText" *ngIf="it.hasError">
+  <div class="historyStack" *ngIf="!busy && items?.length">
+    <div class="historyEntry" *ngFor="let it of items; trackBy: trackByOpId">
+      <div class="rowTitle">{{ formatTitle(it) }}</div>
+      <div class="rowSub">{{ it.timestampUtc || '' }}</div>
+      <div class="rowSub errorText" *ngIf="it.hasError">
         Error: {{ it.errorMessage }}
       </div>
-    </mat-list-item>
-  </mat-list>
+    </div>
+  </div>
 </div>
