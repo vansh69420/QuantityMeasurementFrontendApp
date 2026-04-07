@@ -76,20 +76,24 @@ export class LoginComponent implements AfterViewInit {
     }
   }
 
-  onGoogleButtonClick(): void {
+    onGoogleButtonClick(): void {
     if (!this.googleReady) {
       this.error = 'Google sign-in is not ready yet. Please try again.';
       return;
     }
 
     const googleMountElement = document.getElementById('googleLoginButton');
-    const buttonElement = googleMountElement?.querySelector('div[role="button"]') as HTMLElement | null;
-    if (!buttonElement) {
+    const triggerElement =
+      (googleMountElement?.querySelector('div[role="button"]') as HTMLElement | null) ??
+      (googleMountElement?.querySelector('.S9gUrf-YoZ4jf') as HTMLElement | null) ??
+      (googleMountElement?.querySelector('iframe') as HTMLElement | null);
+
+    if (!triggerElement) {
       this.error = 'Google sign-in is unavailable right now. Please refresh and try again.';
       return;
     }
 
-    buttonElement.click();
+    triggerElement.click();
   }
 
   togglePasswordVisibility(): void {
